@@ -45,7 +45,7 @@ client.on("message", async messageCreate => {
 });
 
 async function execute(messageCreate, serverQueue) {
-  const args = messageCreate.content.split(" ");
+  const args = messageCreate.content.split("Вот");
 
   const voiceChannel = messageCreate.member.voice.channel;
   if (!voiceChannel)
