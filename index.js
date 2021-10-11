@@ -25,7 +25,7 @@ client.on("message", async messageCreate => {
   const serverQueue = queue.get(messageCreate.guild.id);
 
   if (messageCreate.content.startsWith(`${prefix}play`) || messageCreate.content.startsWith(`${prefix}p`)) {
-    execute(message, serverQueue);
+    execute(messageCreate, serverQueue);
     return;
   } else if (messageCreate.content.startsWith(`${prefix}skip`) || messageCreate.content.startsWith(`${prefix}s`)) {
     skip(message, serverQueue);
