@@ -59,7 +59,7 @@ async function execute(messageCreate, serverQueue) {
 
  // Searches YouTube with the message content (this joins the arguments
  // together because songs can have spaces)
- const {videos} = await yts(args.slice(1).join(" "));
+ const {videos} = await yts(args.slice(1).join("вот"));
  if (!videos.length) return messageCreate.channel.send({
       embeds: ["не нашла ничего Т_Т"] });
  const song = {
