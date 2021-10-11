@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig authType="PASSWORD" host="ftp.byethost15.com" id="1199363f-e102-4601-aa4d-a5707555480f" port="22" nameFormat="DESCRIPTIVE" username="b15_29826067" />
+    </configs>
+  </component>
+</project>
