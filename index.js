@@ -18,29 +18,29 @@ client.once("disconnect", () => {
   console.log("Disconnect!");
 });
 
-client.on("message", async message => {
-  if (message.author.bot) return;
-  if (!message.content.startsWith(prefix)) return;
+client.on("message", async messageCreate => {
+  if (messageCreate.author.bot) return;
+  if (!messageCreate.content.startsWith(prefix)) return;
 
-  const serverQueue = queue.get(message.guild.id);
+  const serverQueue = queue.get(messageCreate.guild.id);
 
-  if (message.content.startsWith(`${prefix}play`) || message.content.startsWith(`${prefix}p`)) {
+  if (messageCreate.content.startsWith(`${prefix}play`) || messageCreate.content.startsWith(`${prefix}p`)) {
     execute(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}skip`) || message.content.startsWith(`${prefix}s`)) {
+  } else if (messageCreate.content.startsWith(`${prefix}skip`) || messageCreate.content.startsWith(`${prefix}s`)) {
     skip(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}pause`)) {
+  } else if (messageCreate.content.startsWith(`${prefix}pause`)) {
     pause(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}leave`)) {
+  } else if (messageCreate.content.startsWith(`${prefix}leave`)) {
     leave(message, serverQueue);
     return;
-  } else if (message.content.startsWith(`${prefix}resume`) || message.content.startsWith(`${prefix}r`)) {
+  } else if (messageCreate.content.startsWith(`${prefix}resume`) || messageCreate.content.startsWith(`${prefix}r`)) {
     resume(message, serverQueue);
     return;
   } else {
-    message.channel.send({embeds: ["Попробуй другую команду, кесулькен"] });
+    messageCreate.channel.send({embeds: ["Попробуй другую команду, кесулькен"] });
   }
 });
 
