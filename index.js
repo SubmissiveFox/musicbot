@@ -44,16 +44,15 @@ client.on("message", async messageCreate => {
   }
 });
 
-async function execute(message, serverQueue) {
-  const args = message.content.split(" ");
+async function execute(messageCreate, serverQueue) {
+  const args = messageCreate.content.split(" ");
 
-  const voiceChannel = message.member.voice.channel;
+  const voiceChannel = messageCreate.member.voice.channel;
   if (!voiceChannel)
-    return message.channel.send({
-              embeds: ["Зайди в войс, чтобы я могла поиграть для тебя"] });
-  const permissions = voiceChannel.permissionsFor(message.client.user);
+    return messageCreate.channel.send({embeds: ["Зайди в войс, чтобы я могла поиграть для тебя"] });
+  const permissions = voiceChannel.permissionsFor(messageCreate.client.user);
   if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-    return message.channel.send({embeds: ["Дай мне разрешение, чтобы я могла зайти в войс"] });
+    return messageCreate.channel.send({embeds: ["Дай мне разрешение, чтобы я могла зайти в войс"] });
   }
 
  const yts = require("yt-search");
@@ -61,7 +60,7 @@ async function execute(message, serverQueue) {
  // Searches YouTube with the message content (this joins the arguments
  // together because songs can have spaces)
  const {videos} = await yts(args.slice(1).join(" "));
- if (!videos.length) return message.channel.send({
+ if (!videos.length) return messageCreate.channel.send({
       embeds: ["не нашла ничего Т_Т"] });
  const song = {
    title: videos[0].title,
@@ -70,7 +69,7 @@ async function execute(message, serverQueue) {
 
   if (!serverQueue) {
     const queueContruct = {
-      textChannel: message.channel,
+      textChannel: messageCreate.channel,
       voiceChannel: voiceChannel,
       connection: null,
       songs: [],
@@ -78,38 +77,38 @@ async function execute(message, serverQueue) {
       playing: true
     };
 
-    queue.set(message.guild.id, queueContruct);
+    queue.set(messageCreate.guild.id, queueContruct);
 
     queueContruct.songs.push(song);
 
     try {
       var connection = await voiceChannel.join();
       queueContruct.connection = connection;
-      play(message.guild, queueContruct.songs[0]);
+      play(messageCreate.guild, queueContruct.songs[0]);
     } catch (err) {
       console.log(err);
-      queue.delete(message.guild.id);
-      return message.channel.send(err);
+      queue.delete(messageCreate.guild.id);
+      return messageCreate.channel.send(err);
     }
   } else {
     serverQueue.songs.push(song);
-    return message.channel.send({embeds: ["${song.title} добавила в очередь!"] });
+    return messageCreate.channel.send({embeds: ["${song.title} добавила в очередь!"] });
   }
 }
 
 function skip(message, serverQueue) {
   if (!message.member.voice.channel)
-    return message.channel.send({
+    return messageCreate.channel.send({
            embeds: ["мне нечего скипать"] });
   if (!serverQueue)
-    return message.channel.send({
+    return messageCreate.channel.send({
            embeds: ["я бы скипнула, но нечего"] });
   serverQueue.connection.dispatcher.end();
 }
 
 function pause(message, serverQueue) {
   if (!message.member.voice.channel)
-    return message.channel.send({
+    return messageCreate.channel.send({
            embeds: ["зайди в войсчат и останови меня"] });
 //  if (!serverQueue)
 //    return message.channel.send("Попозже поиграю тебе ещё");
@@ -118,15 +117,15 @@ function pause(message, serverQueue) {
 }
 
 function resume(message, serverQueue) {
-  if (!message.member.voice.channel)
-    return message.channel.send({
+  if (!messageCreate.member.voice.channel)
+    return messageCreate.channel.send({
            embeds: ["давай продолжим"] });
   serverQueue.connection.dispatcher.resume();
 }
 
 function leave(message, serverQueue) {
     if (!message.member.voice.channel)
-        return message.channel.send({
+        return messageCreate.channel.send({
                embeds: ["точно не хочешь еще?"] });
     serverQueue.songs = [];
     serverQueue.connection.dispatcher.end();
